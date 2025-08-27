@@ -1,16 +1,16 @@
-#ifndef CANDIDATO_H
-#define CANDIDATO_H
+#ifndef CANDIDATO_HPP
+#define CANDIDATO_HPP
 
 #include <string>
 #include <optional>
-#include "tipos.h"
+#include "tipos.hpp"
 
 enum class Genero { MASCULINO, FEMININO };
 
 struct Date {
-    int year;
-    int month;
-    int day;
+    int ano;
+    int mes;
+    int dia;
 };
 
 class Candidato {

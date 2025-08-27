@@ -1,4 +1,4 @@
-#include "voto.h"
+#include "voto.hpp"
 
 Voto::Voto(const DadosVoto &dados)
     : numeroVotavel(dados.numeroVotavel), qtdVotos(dados.qtdVotos) {}

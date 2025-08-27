@@ -3,17 +3,17 @@
 #include <vector>
 #include <memory>
 #include <stdexcept>
-#include "leitura.h"
-#include "eleicao.h"
-#include "candidato.h"
-#include "voto.h"
-#include "relatorio.h"
-#include "tipos.h"
+#include "leitura.hpp"
+#include "eleicao.hpp"
+#include "candidato.hpp"
+#include "voto.hpp"
+#include "relatorio.hpp"
+#include "tipos.hpp"
 
-// Funcao auxiliar para converter string de data (dd/mm/yyyy) para a struct Date
+// funcao auxiliar para converter string de data (dd/mm/aaaa) para a struct Date
 Date parseData(const std::string& strData) {
     Date data;
-    sscanf(strData.c_str(), "%d/%d/%d", &data.day, &data.month, &data.year);
+    sscanf(strData.c_str(), "%d/%d/%d", &data.dia, &data.mes, &data.ano);
     return data;
 }
 
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
             eleicao.computaVotos(Voto(dv));
         }
 
-        // geracão dos Relatórios
+        // geracao dos Relatórios
         Relatorio::gerarRelatorios(eleicao, dataEleicao);
 
     } catch (const std::runtime_error& e) {

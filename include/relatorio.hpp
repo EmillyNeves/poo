@@ -1,7 +1,7 @@
-#ifndef RELATORIO_H
-#define RELATORIO_H
+#ifndef RELATORIO_HPP
+#define RELATORIO_HPP
 
-#include "eleicao.h"
+#include "eleicao.hpp"
 
 struct Date;
 

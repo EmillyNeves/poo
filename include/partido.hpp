@@ -1,7 +1,7 @@
-#ifndef PARTIDO_H
-#define PARTIDO_H
+#ifndef PARTIDO_HPP
+#define PARTIDO_HPP
 
-#include "candidato.h"
+#include "candidato.hpp"
 #include <memory>
 #include <string>
 #include <vector>

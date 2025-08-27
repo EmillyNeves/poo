@@ -1,4 +1,4 @@
-#include "relatorio.h"
+#include "relatorio.hpp"
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -7,7 +7,7 @@
 #include <unordered_set>
 #include <numeric>
 
-// Classe para formatar números com separador de milhar '.' e decimal ','
+// classe para formatar numeros com separador de milhar '.' e decimal ','
 struct Punct_pt_BR : std::numpunct<char> {
 protected:
     char do_thousands_sep() const override { return '.'; }
@@ -15,7 +15,7 @@ protected:
     char do_decimal_point() const override { return ','; }
 };
 
-// Função principal que orquestra a geração de todos os relatórios
+// funcao principal que orquestra a geração de todos os relatorios
 void Relatorio::gerarRelatorios(const Eleicao& eleicao, const Date& dataEleicao) {
     std::locale old_locale = std::cout.imbue(std::locale(std::cout.getloc(), new Punct_pt_BR));
 
@@ -44,10 +44,10 @@ void Relatorio::gerarRelatorios(const Eleicao& eleicao, const Date& dataEleicao)
     gerarRelatorioGenero(eleitos);
     gerarRelatorioTotalVotos(todosPartidos);
 
-    std::cout.imbue(std::locale("C")); // Restaura o locale para evitar memory leak
+    std::cout.imbue(std::locale("C")); // restaura o locale para evitar vazamento de memoria
 }
 
-// Função auxiliar para imprimir uma linha padronizada de candidato
+// funcao auxiliar para imprimir um candidato
 void Relatorio::imprimirLinhaCandidato(const Candidato& candidato, int posicao) {
     std::cout << posicao << " - " 
               << (candidato.isFederacao() ? "*" : "") 
@@ -56,7 +56,7 @@ void Relatorio::imprimirLinhaCandidato(const Candidato& candidato, int posicao) 
               << candidato.getVotosNominais() << " votos)" << std::endl;
 }
 
-// Implementações de cada relatório em funções separadas
+// implementacoes de cada relatorio em funcoes separadas
 void Relatorio::gerarRelatorioVagas(size_t numVagas) {
     std::cout << "Número de vagas: " << numVagas << std::endl;
 }

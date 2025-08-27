@@ -11,12 +11,12 @@ Este projeto e uma aplicacao em C++ destinada a processar dados de eleicões mun
       * Sua funcao e "orquestrar" o fluxo: inicializa os objetos das outras camadas e chama seus metodos na ordem correta.
       * Fluxo: Lê os argumentos da linha de comando -\> Chama a Camada de Leitura -\> Recebe os dados crus -\> Alimenta a Camada de Dominio -\> Chama a Camada de Apresentacao.
 
-2.  **Camada de Entrada/Saida (`leitura.h`, `leitura.cpp`)**:
+2.  **Camada de Entrada/Saida (`leitura.hpp`, `leitura.cpp`)**:
 
       * Responsavel por ler e analisar (fazer o *parsing*) dos arquivos CSV de candidatos e votacao.
       * Uma de suas funcões cruciais e **converter as strings lidas de ISO-8859-1 para UTF-8**, garantindo que o restante do sistema lide com uma codificacao padronizada.
 
-3.  **Camada de Transferência de Dados (`tipos.h`)**:
+3.  **Camada de Transferência de Dados (`tipos.hpp`)**:
 
       * Define `structs` simples (`DadosCandidato`, `DadosVoto`), que funcionam como **DTOs (Data Transfer Objects)**.
       * Essas `structs` sao o "contrato" entre a camada de leitura e a camada de dominio. A leitura popula esses objetos, e o dominio os consome para criar suas entidades.
@@ -27,7 +27,7 @@ Este projeto e uma aplicacao em C++ destinada a processar dados de eleicões mun
       * Toda a lógica de apuracao, contagem de votos, calculo de eleitos e associacões esta aqui.
       * **Importante**: Esta camada e totalmente isolada, nao sabe se os dados vêm de um CSV ou de um banco de dados.
 
-5.  **Camada de Apresentacao (`relatorio.h`, `relatorio.cpp`)**:
+5.  **Camada de Apresentacao (`relatorio.hpp`, `relatorio.cpp`)**:
 
       * Responsavel por pegar os dados processados da Camada de Dominio e formata-los para exibicao no console.
       * Implementa a formatacao de números para o padrao brasileiro (ex: `1.234,56`) usando `std::locale`.
@@ -69,12 +69,12 @@ O projeto utiliza um `Makefile` para automatizar a compilacao e execucao. Os com
 ### 4\. Estrutura de Módulos e Classes
 
   * `main.cpp`: Ponto de entrada e orquestrador da aplicacao
-  * `leitura.h/.cpp`: Implementa a lógica de leitura dos arquivos CSV e conversao de codificacao
-  * `tipos.h`: Define as `structs` `DadosCandidato` e `DadosVoto` para transferência de dados
-  * `candidato.h/.cpp`: Modela um candidato, seus dados pessoais e seus votos nominais
-  * `partido.h/.cpp`: Modela um partido politico, agregando seus candidatos e votos de legenda e nominais
-  * `voto.h/.cpp`: Modela uma entrada de voto do arquivo de votacao (pode ser nominal ou de legenda)
-  * `eleicao.h/.cpp`: Classe central da camada de dominio, que agrega todos os partidos e candidatos, e computa os totais da eleicao.
-  * `relatorio.h/.cpp`: Classe estatica responsavel por gerar e imprimir todos os relatórios finais no console
+  * `leitura.hpp/.cpp`: Implementa a lógica de leitura dos arquivos CSV e conversao de codificacao
+  * `tipos.hpp`: Define as `structs` `DadosCandidato` e `DadosVoto` para transferência de dados
+  * `candidato.hpp/.cpp`: Modela um candidato, seus dados pessoais e seus votos nominais
+  * `partido.hpp/.cpp`: Modela um partido politico, agregando seus candidatos e votos de legenda e nominais
+  * `voto.hpp/.cpp`: Modela uma entrada de voto do arquivo de votacao (pode ser nominal ou de legenda)
+  * `eleicao.hpp/.cpp`: Classe central da camada de dominio, que agrega todos os partidos e candidatos, e computa os totais da eleicao.
+  * `relatorio.hpp/.cpp`: Classe estatica responsavel por gerar e imprimir todos os relatórios finais no console
   * `Makefile`: Script de compilacao e execucao do projeto
 -----

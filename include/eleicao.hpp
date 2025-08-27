@@ -1,9 +1,9 @@
-#ifndef ELEICAO_H
-#define ELEICAO_H
+#ifndef ELEICAO_HPP
+#define ELEICAO_HPP
 
-#include "candidato.h"
-#include "partido.h"
-#include "voto.h"
+#include "candidato.hpp"
+#include "partido.hpp"
+#include "voto.hpp"
 #include <map>
 #include <memory>
 #include <vector>
@@ -20,4 +20,4 @@ public:
     std::vector<std::shared_ptr<Partido>> getTodosPartidos() const;
 };
 
-#endif // ELEICAO_H
+#endif 

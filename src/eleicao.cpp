@@ -1,4 +1,4 @@
-#include "eleicao.h"
+#include "eleicao.hpp"
 
 void Eleicao::addCandidato(const std::shared_ptr<Candidato>& candidato) {
     if (!candidato) return;

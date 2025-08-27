@@ -1,13 +1,13 @@
-#include "candidato.h"
+#include "candidato.hpp"
 #include <sstream>
 
 Candidato::Candidato(const DadosCandidato &dados)
     : numeroCandidato(dados.numeroCandidato),
-      nomeUrna(dados.nomeUrna),
-      numeroPartido(dados.numeroPartido),
-      siglaPartido(dados.siglaPartido),
-      numeroFederacao(dados.numeroFederacao),
-      votosNominais(0)
+    nomeUrna(dados.nomeUrna),
+    numeroPartido(dados.numeroPartido),
+    siglaPartido(dados.siglaPartido),
+    numeroFederacao(dados.numeroFederacao),
+    votosNominais(0)
 {
     eleito = (dados.situacaoTurno == 2 || dados.situacaoTurno == 3);
     valido = (dados.situacaoTurno != 1 && dados.situacaoTurno != -1);
@@ -17,11 +17,11 @@ Candidato::Candidato(const DadosCandidato &dados)
     if (!dados.dataNascimento.empty())
     {
         std::stringstream dss(dados.dataNascimento);
-        int day, month, year;
+        int dia, mes, ano;
         char discard;
-        if (dss >> day >> discard >> month >> discard >> year && discard == '/')
+        if (dss >> dia >> discard >> mes >> discard >> ano && discard == '/')
         {
-            dataNascimento = Date{year, month, day};
+            dataNascimento = Date{ano, mes, dia};
         }
     }
 }
@@ -36,9 +36,9 @@ int Candidato::getIdade(const Date &dataEleicao) const
     if (!dataNascimento.has_value())
         return -1;
 
-    int diff = dataEleicao.year - dataNascimento->year;
-    if (dataEleicao.month < dataNascimento->month ||
-        (dataEleicao.month == dataNascimento->month && dataEleicao.day < dataNascimento->day))
+    int diff = dataEleicao.ano - dataNascimento->ano;
+    if (dataEleicao.mes < dataNascimento->mes ||
+        (dataEleicao.mes == dataNascimento->mes && dataEleicao.dia < dataNascimento->dia))
     {
         diff--;
     }
@@ -65,15 +65,15 @@ bool Candidato::operator>(const Candidato &other) const
     }
     if (this->dataNascimento.has_value() && other.dataNascimento.has_value())
     {
-        if (this->dataNascimento->year != other.dataNascimento->year)
+        if (this->dataNascimento->ano != other.dataNascimento->ano)
         {
-            return this->dataNascimento->year < other.dataNascimento->year;
+            return this->dataNascimento->ano < other.dataNascimento->ano;
         }
-        if (this->dataNascimento->month != other.dataNascimento->month)
+        if (this->dataNascimento->mes != other.dataNascimento->mes)
         {
-            return this->dataNascimento->month < other.dataNascimento->month;
+            return this->dataNascimento->mes < other.dataNascimento->mes;
         }
-        return this->dataNascimento->day < other.dataNascimento->day;
+        return this->dataNascimento->dia < other.dataNascimento->dia;
     }
     return false; // caso nao haja datas
 }

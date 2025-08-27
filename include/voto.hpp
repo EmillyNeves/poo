@@ -1,7 +1,7 @@
-#ifndef VOTO_H
-#define VOTO_H
+#ifndef VOTO_HPP
+#define VOTO_HPP
 
-#include "tipos.h"
+#include "tipos.hpp"
 
 class Voto {
 private:

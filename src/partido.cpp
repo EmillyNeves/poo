@@ -1,4 +1,4 @@
-#include "partido.h"
+#include "partido.hpp"
 #include <numeric>
 #include <algorithm>
 
@@ -72,11 +72,11 @@ std::shared_ptr<Candidato> Partido::getCandidatoMenosVotado() const
                                    {
                                        const auto &da = a->getDataNascimento().value();
                                        const auto &db = b->getDataNascimento().value();
-                                       if (da.year != db.year)
-                                           return da.year > db.year;
-                                       if (da.month != db.month)
-                                           return da.month > db.month;
-                                       return da.day > db.day;
+                                       if (da.ano != db.ano)
+                                           return da.ano > db.ano;
+                                       if (da.mes != db.mes)
+                                           return da.mes > db.mes;
+                                       return da.dia > db.dia;
                                    }
                                    return false;
                                });

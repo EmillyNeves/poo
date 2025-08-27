@@ -1,5 +1,5 @@
 ############
-# Exemplo de makefile personalizado para organizacao em diretorios
+# Makefile personalizado para organizacao em diretorios
 # Paula e Emilly
 ############
 

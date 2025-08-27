@@ -1,7 +1,7 @@
-#ifndef LEITURA_H
-#define LEITURA_H
+#ifndef LEITURA_HPP
+#define LEITURA_HPP
 
-#include "tipos.h"
+#include "tipos.hpp"
 #include <vector>
 #include <string>
 
