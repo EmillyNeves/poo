@@ -1,24 +1,33 @@
 #include "eleicao.hpp"
 
+// O construtor agora recebe o mapa e cria TODOS os partidos antecipadamente.
+Eleicao::Eleicao(const std::map<int, std::string>& mapaDePartidos) {
+    for(const auto& par : mapaDePartidos){
+        int numero = par.first;
+        std::string sigla = par.second;
+        this->partidos[numero] = std::make_shared<Partido>(numero, sigla);
+    }
+}
+
 void Eleicao::addCandidato(const std::shared_ptr<Candidato>& candidato) {
     if (!candidato) return;
 
+    // Adiciona o candidato ao mapa geral de candidatos
     candidatos[candidato->getNumeroCandidato()] = candidato;
 
-    int numPartido = candidato->getNumeroPartido();
-    if (partidos.find(numPartido) == partidos.end()) {
-        partidos[numPartido] = std::make_shared<Partido>(numPartido, candidato->getSiglaPartido());
+    // Adiciona o candidato ao seu respectivo partido (que já foi criado no construtor)
+    auto it = partidos.find(candidato->getNumeroPartido());
+    if (it != partidos.end()) {
+        it->second->adicionarCandidato(candidato);
     }
-    partidos[numPartido]->adicionarCandidato(candidato);
 }
 
 void Eleicao::computaVotos(const Voto& voto) {
     if (voto.isLegenda()) {
-        int numPartido = voto.getNumeroVotavel();
-        if (partidos.find(numPartido) == partidos.end()) {
-            partidos[numPartido] = std::make_shared<Partido>(numPartido, "");
+        auto it = partidos.find(voto.getNumeroVotavel());
+        if (it != partidos.end()) {
+            it->second->adicionarVotosLegenda(voto.getQtdVotos());
         }
-        partidos[numPartido]->adicionarVotosLegenda(voto.getQtdVotos());
     } else {
         auto it = candidatos.find(voto.getNumeroVotavel());
         if (it != candidatos.end()) {

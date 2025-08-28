@@ -3,12 +3,12 @@
 #include <vector>
 #include <memory>
 #include <stdexcept>
+#include <map>
 #include "leitura.hpp"
 #include "eleicao.hpp"
 #include "candidato.hpp"
 #include "voto.hpp"
 #include "relatorio.hpp"
-#include "tipos.hpp"
 
 // funcao auxiliar para converter string de data (dd/mm/aaaa) para a struct Date
 Date parseData(const std::string& strData) {
@@ -30,25 +30,27 @@ int main(int argc, char *argv[]) {
         std::string caminhoVotacao = argv[3];
         Date dataEleicao = parseData(argv[4]);
 
-        // leitura dos arquivos
-        Leitura leitor;
-        std::vector<DadosCandidato> dadosCandidatos = leitor.lerArquivoCandidatos(caminhoCandidatos, codigoMunicipio);
-        std::vector<DadosVoto> dadosVotos = leitor.lerArquivoVotacao(caminhoVotacao, codigoMunicipio);
+        // PASSO 1: Pré-carregamento de TODOS os partidos para ter as siglas corretas
+        std::map<int, std::string> mapaDePartidos = Leitura::lerTodosOsPartidos(caminhoCandidatos);
 
-        // faz a eleicão
-        Eleicao eleicao;
+        // PASSO 2: Leitura dos dados específicos do município
+        std::vector<DadosCandidato> dadosCandidatos = Leitura::lerArquivoCandidatos(caminhoCandidatos, codigoMunicipio);
+        std::vector<DadosVoto> dadosVotos = Leitura::lerArquivoVotacao(caminhoVotacao, codigoMunicipio);
+        
+        // PASSO 3: Inicia a eleição já com todos os partidos conhecidos
+        Eleicao eleicao(mapaDePartidos);
 
-        // add candidatos
+        // PASSO 4: Adiciona os candidatos (válidos) do município
         for (const auto& dc : dadosCandidatos) {
             eleicao.addCandidato(std::make_shared<Candidato>(dc));
         }
 
-        // computa os votos
+        // PASSO 5: Computa os votos
         for (const auto& dv : dadosVotos) {
             eleicao.computaVotos(Voto(dv));
         }
 
-        // geracao dos Relatórios
+        // PASSO 6: Geração dos Relatórios
         Relatorio::gerarRelatorios(eleicao, dataEleicao);
 
     } catch (const std::runtime_error& e) {

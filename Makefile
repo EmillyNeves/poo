@@ -1,6 +1,6 @@
 ############
 # Makefile personalizado para organizacao em diretorios
-# Paula e Emilly
+# Sistema de Análise Eleitoral - C++
 ############
 
 # nome do compilador
@@ -32,12 +32,10 @@ all: $(EXECUTAVEL)
 # arquivos-objetos
 # os caminhos para os .o (ex: src/arquivo.o)
 $(EXECUTAVEL): $(OBJETOS)
-	@echo "Linkando o executável..."
 	@$(CPP) -o $@ $^ 
 
 # alvo para cada arquivo-objeto depende do código fonte
 src/%.o: src/%.cpp
-	@echo "Compilando $<..."
 	@$(CPP) $(CPPFLAGS) -c $(CFLAGS) $< -o $@
 
 # comandos para execução    
@@ -46,5 +44,4 @@ run: $(EXECUTAVEL)
 
 # comando para limpeza
 clean: 
-	@echo "Limpando arquivos gerados..."
 	@rm -f src/*.o $(EXECUTAVEL)

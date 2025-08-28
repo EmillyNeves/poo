@@ -3,7 +3,6 @@
 
 #include <string>
 #include <optional>
-#include "tipos.hpp"
 
 enum class Genero { MASCULINO, FEMININO };
 
@@ -11,6 +10,21 @@ struct Date {
     int ano;
     int mes;
     int dia;
+};
+
+// estrutura para carregar os dados brutos de um candidato do CSV
+struct DadosCandidato {
+    int codigoMunicipio;
+    int codigoCargo;
+    int numeroCandidato;
+    std::string nomeUrna;
+    std::string nomeCompleto;
+    int numeroPartido;
+    std::string siglaPartido;
+    int numeroFederacao;
+    std::string dataNascimento; // lida como string, processada pelo construtor de Candidato
+    int genero;
+    int situacaoTurno;
 };
 
 class Candidato {

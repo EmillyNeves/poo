@@ -1,12 +1,15 @@
 #ifndef LEITURA_HPP
 #define LEITURA_HPP
 
-#include "tipos.hpp"
+#include "candidato.hpp"
+#include "voto.hpp"
 #include <vector>
 #include <string>
+#include <map>
 
 class Leitura {
 public:
+    static std::map<int, std::string> lerTodosOsPartidos(const std::string& caminhoArquivo);
     static std::vector<DadosCandidato> lerArquivoCandidatos(const std::string& caminhoArquivo, int codigoMunicipioFiltro);
     static std::vector<DadosVoto> lerArquivoVotacao(const std::string& caminhoArquivo, int codigoMunicipioFiltro);
 
@@ -15,4 +18,4 @@ private:
     static std::vector<std::string> split(const std::string& s, char delimiter);
 };
 
-#endif 
+#endif
