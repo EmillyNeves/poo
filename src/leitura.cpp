@@ -5,6 +5,12 @@
 #include <cstdint>
 #include <algorithm>
 
+Date Leitura::parseData(const std::string& strData) {
+    Date data;
+    sscanf(strData.c_str(), "%d/%d/%d", &data.dia, &data.mes, &data.ano);
+    return data;
+}
+
 std::string Leitura::iso_8859_1_to_utf8(const std::string &str)
 {
     std::string strOut;
@@ -65,7 +71,6 @@ std::vector<std::string> Leitura::split(const std::string &s, char delimiter)
     return tokens;
 }
 
-// Implementação da nova função de leitura única
 ResultadoLeituraCandidatos Leitura::processarArquivoCandidatos(const std::string& caminhoArquivo, int codigoMunicipioFiltro) {
     std::ifstream file(caminhoArquivo);
     if (!file) {
@@ -74,20 +79,18 @@ ResultadoLeituraCandidatos Leitura::processarArquivoCandidatos(const std::string
 
     ResultadoLeituraCandidatos resultado;
     std::string line;
-    std::getline(file, line); // Pula o cabeçalho
+    std::getline(file, line);
 
     while (std::getline(file, line)) {
         auto fields = split(line, ';');
         if (fields.size() < 49) continue;
 
         try {
-            //  extrai dados do partido para o mapa geral
             int numeroPartido = std::stoi(fields[ColunasCandidato::NUMERO_PARTIDO]);
             if (resultado.mapaDePartidos.find(numeroPartido) == resultado.mapaDePartidos.end()) {
                 resultado.mapaDePartidos[numeroPartido] = iso_8859_1_to_utf8(fields[ColunasCandidato::SIGLA_PARTIDO]);
             }
 
-            //verifica se o candidato e do municipio e o adiciona
             int codigoMunicipioLinha = std::stoi(fields[ColunasCandidato::CODIGO_MUNICIPIO]);
             int codigoCargo = std::stoi(fields[ColunasCandidato::CODIGO_CARGO]);
             

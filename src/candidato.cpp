@@ -9,11 +9,12 @@ Candidato::Candidato(const DadosCandidato &dados)
     numeroFederacao(dados.numeroFederacao),
     votosNominais(0)
 {
-    eleito = (dados.situacaoTurno == 2 || dados.situacaoTurno == 3);
-    valido = (dados.situacaoTurno != 1 && dados.situacaoTurno != -1);
+    SituacaoCandidato sit = static_cast<SituacaoCandidato>(dados.situacaoTurno);
+    eleito = (sit == SituacaoCandidato::ELEITO_QP || sit == SituacaoCandidato::ELEITO_MEDIA);
+    valido = (sit != SituacaoCandidato::INVALIDO && dados.situacaoTurno != -1);
+    
     genero = (dados.genero == 2) ? Genero::MASCULINO : Genero::FEMININO;
 
-    // data nascimento
     if (!dados.dataNascimento.empty())
     {
         std::stringstream dss(dados.dataNascimento);
@@ -56,24 +57,27 @@ int Candidato::getVotosNominais() const { return votosNominais; }
 const std::optional<Date> &Candidato::getDataNascimento() const { return dataNascimento; }
 Genero Candidato::getGenero() const { return genero; }
 
-// mais votado primeiro, mais velho como desempate
 bool Candidato::operator>(const Candidato &other) const
 {
     if (this->votosNominais != other.votosNominais)
     {
         return this->votosNominais > other.votosNominais;
     }
-    if (this->dataNascimento.has_value() && other.dataNascimento.has_value())
+
+    const auto& d1 = this->dataNascimento;
+    const auto& d2 = other.dataNascimento;
+
+    if (d1.has_value() && d2.has_value())
     {
-        if (this->dataNascimento->ano != other.dataNascimento->ano)
-        {
-            return this->dataNascimento->ano < other.dataNascimento->ano;
-        }
-        if (this->dataNascimento->mes != other.dataNascimento->mes)
-        {
-            return this->dataNascimento->mes < other.dataNascimento->mes;
-        }
-        return this->dataNascimento->dia < other.dataNascimento->dia;
+        const auto& date1 = d1.value();
+        const auto& date2 = d2.value();
+        if (date1.ano != date2.ano) return date1.ano < date2.ano;
+        if (date1.mes != date2.mes) return date1.mes < date2.mes;
+        return date1.dia < date2.dia;
     }
-    return false; // caso nao haja datas
+    
+    if (d1.has_value() && !d2.has_value()) return true;
+    if (!d1.has_value() && d2.has_value()) return false;
+
+    return false;
 }

@@ -10,13 +10,6 @@
 #include "voto.hpp"
 #include "relatorio.hpp"
 
-// funcao auxiliar para converter string de data (dd/mm/aaaa) para a struct Date
-Date parseData(const std::string& strData) {
-    Date data;
-    sscanf(strData.c_str(), "%d/%d/%d", &data.dia, &data.mes, &data.ano);
-    return data;
-}
-
 int main(int argc, char *argv[]) {
     if (argc != 5) {
         std::cerr << "Erro: Número incorreto de argumentos." << std::endl;
@@ -28,28 +21,22 @@ int main(int argc, char *argv[]) {
         int codigoMunicipio = std::stoi(argv[1]);
         std::string caminhoCandidatos = argv[2];
         std::string caminhoVotacao = argv[3];
-        Date dataEleicao = parseData(argv[4]);
+        Date dataEleicao = Leitura::parseData(argv[4]);
 
-        // Faz a leitura otimizada do arquivo de candidatos
         ResultadoLeituraCandidatos resultadoCandidatos = Leitura::processarArquivoCandidatos(caminhoCandidatos, codigoMunicipio);
         
-        // A leitura de votos continua igual
         std::vector<DadosVoto> dadosVotos = Leitura::lerArquivoVotacao(caminhoVotacao, codigoMunicipio);
         
-        // Inicia a eleição com o mapa de partidos pré-carregado
         Eleicao eleicao(resultadoCandidatos.mapaDePartidos);
 
-        // Adiciona os candidatos (válidos) do município
         for (const auto& dc : resultadoCandidatos.candidatosDoMunicipio) {
             eleicao.addCandidato(std::make_shared<Candidato>(dc));
         }
 
-        // Computa os votos
         for (const auto& dv : dadosVotos) {
             eleicao.computaVotos(Voto(dv));
         }
 
-        // Geração dos Relatórios
         Relatorio::gerarRelatorios(eleicao, dataEleicao);
 
     } catch (const std::runtime_error& e) {

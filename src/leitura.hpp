@@ -7,7 +7,7 @@
 #include <string>
 #include <map>
 
-// Nova estrutura para retornar os dois resultados da leitura de candidatos de uma só vez
+// retornar os resultados da leitura de candidatos
 struct ResultadoLeituraCandidatos {
     std::map<int, std::string> mapaDePartidos;
     std::vector<DadosCandidato> candidatosDoMunicipio;
@@ -18,6 +18,8 @@ public:
     static ResultadoLeituraCandidatos processarArquivoCandidatos(const std::string& caminhoArquivo, int codigoMunicipioFiltro);
     
     static std::vector<DadosVoto> lerArquivoVotacao(const std::string& caminhoArquivo, int codigoMunicipioFiltro);
+    
+    static Date parseData(const std::string& strData);
 
 private:
     static std::string iso_8859_1_to_utf8(const std::string &str);

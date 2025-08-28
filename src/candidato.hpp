@@ -6,6 +6,12 @@
 
 enum class Genero { MASCULINO, FEMININO };
 
+enum class SituacaoCandidato {
+    INVALIDO = 1,
+    ELEITO_QP = 2,
+    ELEITO_MEDIA = 3
+};
+
 struct Date {
     int ano;
     int mes;
@@ -22,7 +28,7 @@ struct DadosCandidato {
     int numeroPartido;
     std::string siglaPartido;
     int numeroFederacao;
-    std::string dataNascimento; // lida como string, processada pelo construtor de Candidato
+    std::string dataNascimento;
     int genero;
     int situacaoTurno;
 };
@@ -60,4 +66,4 @@ public:
     bool operator>(const Candidato &other) const;
 };
 
-#endif 
+#endif
