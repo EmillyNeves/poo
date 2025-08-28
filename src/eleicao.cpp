@@ -1,6 +1,6 @@
 #include "eleicao.hpp"
 
-// O construtor agora recebe o mapa e cria TODOS os partidos antecipadamente.
+// recebe o mapa e cria TODOS os partidos antecipadamente
 Eleicao::Eleicao(const std::map<int, std::string>& mapaDePartidos) {
     for(const auto& par : mapaDePartidos){
         int numero = par.first;
@@ -12,10 +12,10 @@ Eleicao::Eleicao(const std::map<int, std::string>& mapaDePartidos) {
 void Eleicao::addCandidato(const std::shared_ptr<Candidato>& candidato) {
     if (!candidato) return;
 
-    // Adiciona o candidato ao mapa geral de candidatos
+    //mapa geral de candidatos
     candidatos[candidato->getNumeroCandidato()] = candidato;
 
-    // Adiciona o candidato ao seu respectivo partido (que já foi criado no construtor)
+    //add candidato ao seu respectivo partido
     auto it = partidos.find(candidato->getNumeroPartido());
     if (it != partidos.end()) {
         it->second->adicionarCandidato(candidato);

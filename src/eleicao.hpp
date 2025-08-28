@@ -14,7 +14,7 @@ private:
     std::map<int, std::shared_ptr<Partido>> partidos;
 
 public:
-    Eleicao(const std::map<int, std::string>& mapaDePartidos); // Construtor modificado
+    Eleicao(const std::map<int, std::string>& mapaDePartidos);
     void addCandidato(const std::shared_ptr<Candidato>& candidato);
     void computaVotos(const Voto& voto);
     std::vector<std::shared_ptr<Candidato>> getTodosCandidatos() const;

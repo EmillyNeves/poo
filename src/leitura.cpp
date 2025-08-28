@@ -82,7 +82,6 @@ std::map<int, std::string> Leitura::lerTodosOsPartidos(const std::string& caminh
         try {
             int numeroPartido = std::stoi(fields[ColunasCandidato::NUMERO_PARTIDO]);
             if (mapaDePartidos.find(numeroPartido) == mapaDePartidos.end()) {
-                // CORREÇÃO AQUI: O nome da função estava com erro de digitação.
                 mapaDePartidos[numeroPartido] = iso_8859_1_to_utf8(fields[ColunasCandidato::SIGLA_PARTIDO]);
             }
         } catch (const std::invalid_argument&) {

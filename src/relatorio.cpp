@@ -73,7 +73,6 @@ void Relatorio::gerarRelatorios(const Eleicao &eleicao, const Date &dataEleicao)
 
 void Relatorio::imprimirLinhaCandidato(const Candidato &candidato, int posicao)
 {
-    // A especificação para este relatório parece usar sempre "votos" no plural.
     std::cout << posicao << " - "
               << (candidato.isFederacao() ? "*" : "")
               << candidato.getNomeUrna() << " ("

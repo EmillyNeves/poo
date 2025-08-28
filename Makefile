@@ -1,5 +1,4 @@
 ############
-# Makefile personalizado para organizacao em diretorios
 # Sistema de Análise Eleitoral - C++
 ############
 
