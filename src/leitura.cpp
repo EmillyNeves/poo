@@ -65,80 +65,57 @@ std::vector<std::string> Leitura::split(const std::string &s, char delimiter)
     return tokens;
 }
 
-std::map<int, std::string> Leitura::lerTodosOsPartidos(const std::string& caminhoArquivo) {
+// Implementação da nova função de leitura única
+ResultadoLeituraCandidatos Leitura::processarArquivoCandidatos(const std::string& caminhoArquivo, int codigoMunicipioFiltro) {
     std::ifstream file(caminhoArquivo);
     if (!file) {
-        throw std::runtime_error("Erro: Arquivo de candidatos não encontrado para pre-carregar partidos: " + caminhoArquivo);
+        throw std::runtime_error("Erro: Arquivo de candidatos não encontrado em " + caminhoArquivo);
     }
 
-    std::map<int, std::string> mapaDePartidos;
+    ResultadoLeituraCandidatos resultado;
     std::string line;
-    std::getline(file, line); 
+    std::getline(file, line); // Pula o cabeçalho
 
     while (std::getline(file, line)) {
         auto fields = split(line, ';');
-        if (fields.size() <= ColunasCandidato::SIGLA_PARTIDO) continue;
+        if (fields.size() < 49) continue;
 
         try {
+            //  extrai dados do partido para o mapa geral
             int numeroPartido = std::stoi(fields[ColunasCandidato::NUMERO_PARTIDO]);
-            if (mapaDePartidos.find(numeroPartido) == mapaDePartidos.end()) {
-                mapaDePartidos[numeroPartido] = iso_8859_1_to_utf8(fields[ColunasCandidato::SIGLA_PARTIDO]);
+            if (resultado.mapaDePartidos.find(numeroPartido) == resultado.mapaDePartidos.end()) {
+                resultado.mapaDePartidos[numeroPartido] = iso_8859_1_to_utf8(fields[ColunasCandidato::SIGLA_PARTIDO]);
+            }
+
+            //verifica se o candidato e do municipio e o adiciona
+            int codigoMunicipioLinha = std::stoi(fields[ColunasCandidato::CODIGO_MUNICIPIO]);
+            int codigoCargo = std::stoi(fields[ColunasCandidato::CODIGO_CARGO]);
+            
+            if (codigoMunicipioLinha == codigoMunicipioFiltro && codigoCargo == COD_VEREADOR) {
+                int situacaoTurno = std::stoi(fields[ColunasCandidato::SITUACAO_TURNO]);
+                bool valido = (situacaoTurno != 1 && situacaoTurno != -1);
+                
+                if (valido) {
+                    DadosCandidato dado;
+                    dado.codigoMunicipio = codigoMunicipioLinha;
+                    dado.codigoCargo = codigoCargo;
+                    dado.situacaoTurno = situacaoTurno;
+                    dado.numeroCandidato = std::stoi(fields[ColunasCandidato::NUMERO_CANDIDATO]);
+                    dado.nomeCompleto = iso_8859_1_to_utf8(fields[ColunasCandidato::NOME_COMPLETO]);
+                    dado.nomeUrna = iso_8859_1_to_utf8(fields[ColunasCandidato::NOME_URNA]);
+                    dado.siglaPartido = iso_8859_1_to_utf8(fields[ColunasCandidato::SIGLA_PARTIDO]);
+                    dado.numeroPartido = numeroPartido;
+                    dado.numeroFederacao = std::stoi(fields[ColunasCandidato::NUMERO_FEDERACAO]);
+                    dado.dataNascimento = fields[ColunasCandidato::DATA_NASCIMENTO];
+                    dado.genero = std::stoi(fields[ColunasCandidato::GENERO]);
+                    resultado.candidatosDoMunicipio.push_back(dado);
+                }
             }
         } catch (const std::invalid_argument&) {
             continue;
         }
     }
-    return mapaDePartidos;
-}
-
-std::vector<DadosCandidato> Leitura::lerArquivoCandidatos(const std::string &caminhoArquivo, int codigoMunicipioFiltro)
-{
-    std::ifstream file(caminhoArquivo);
-    if (!file)
-    {
-        throw std::runtime_error("Erro: Arquivo de candidatos não encontrado em " + caminhoArquivo);
-    }
-
-    std::vector<DadosCandidato> dados;
-    std::string line;
-    std::getline(file, line); 
-
-    while (std::getline(file, line))
-    {
-        auto fields = split(line, ';');
-        if (fields.size() < 49)
-            continue;
-
-        try
-        {
-            int codigoMunicipioLinha = std::stoi(fields[ColunasCandidato::CODIGO_MUNICIPIO]);
-            int codigoCargo = std::stoi(fields[ColunasCandidato::CODIGO_CARGO]);
-            int situacaoTurno = std::stoi(fields[ColunasCandidato::SITUACAO_TURNO]);
-            bool valido = (situacaoTurno != 1 && situacaoTurno != -1);
-
-            if (codigoMunicipioLinha == codigoMunicipioFiltro && codigoCargo == COD_VEREADOR && valido)
-            {
-                DadosCandidato dado;
-                dado.codigoMunicipio = codigoMunicipioLinha;
-                dado.codigoCargo = codigoCargo;
-                dado.situacaoTurno = situacaoTurno;
-                dado.numeroCandidato = std::stoi(fields[ColunasCandidato::NUMERO_CANDIDATO]);
-                dado.nomeCompleto = iso_8859_1_to_utf8(fields[ColunasCandidato::NOME_COMPLETO]);
-                dado.nomeUrna = iso_8859_1_to_utf8(fields[ColunasCandidato::NOME_URNA]);
-                dado.siglaPartido = iso_8859_1_to_utf8(fields[ColunasCandidato::SIGLA_PARTIDO]);
-                dado.numeroPartido = std::stoi(fields[ColunasCandidato::NUMERO_PARTIDO]);
-                dado.numeroFederacao = std::stoi(fields[ColunasCandidato::NUMERO_FEDERACAO]);
-                dado.dataNascimento = fields[ColunasCandidato::DATA_NASCIMENTO];
-                dado.genero = std::stoi(fields[ColunasCandidato::GENERO]);
-                dados.push_back(dado);
-            }
-        }
-        catch (const std::invalid_argument &)
-        {
-            continue;
-        }
-    }
-    return dados;
+    return resultado;
 }
 
 std::vector<DadosVoto> Leitura::lerArquivoVotacao(const std::string &caminhoArquivo, int codigoMunicipioFiltro)

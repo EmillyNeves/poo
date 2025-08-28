@@ -7,10 +7,16 @@
 #include <string>
 #include <map>
 
+// Nova estrutura para retornar os dois resultados da leitura de candidatos de uma só vez
+struct ResultadoLeituraCandidatos {
+    std::map<int, std::string> mapaDePartidos;
+    std::vector<DadosCandidato> candidatosDoMunicipio;
+};
+
 class Leitura {
 public:
-    static std::map<int, std::string> lerTodosOsPartidos(const std::string& caminhoArquivo);
-    static std::vector<DadosCandidato> lerArquivoCandidatos(const std::string& caminhoArquivo, int codigoMunicipioFiltro);
+    static ResultadoLeituraCandidatos processarArquivoCandidatos(const std::string& caminhoArquivo, int codigoMunicipioFiltro);
+    
     static std::vector<DadosVoto> lerArquivoVotacao(const std::string& caminhoArquivo, int codigoMunicipioFiltro);
 
 private:

@@ -30,27 +30,26 @@ int main(int argc, char *argv[]) {
         std::string caminhoVotacao = argv[3];
         Date dataEleicao = parseData(argv[4]);
 
-        // pre-carregamento de TODOS os partidos
-        std::map<int, std::string> mapaDePartidos = Leitura::lerTodosOsPartidos(caminhoCandidatos);
-
-        // leitura dos dados do município
-        std::vector<DadosCandidato> dadosCandidatos = Leitura::lerArquivoCandidatos(caminhoCandidatos, codigoMunicipio);
+        // Faz a leitura otimizada do arquivo de candidatos
+        ResultadoLeituraCandidatos resultadoCandidatos = Leitura::processarArquivoCandidatos(caminhoCandidatos, codigoMunicipio);
+        
+        // A leitura de votos continua igual
         std::vector<DadosVoto> dadosVotos = Leitura::lerArquivoVotacao(caminhoVotacao, codigoMunicipio);
         
-        // inicia com todos os partidos conhecidos
-        Eleicao eleicao(mapaDePartidos);
+        // Inicia a eleição com o mapa de partidos pré-carregado
+        Eleicao eleicao(resultadoCandidatos.mapaDePartidos);
 
-        // adiciona os candidatos (válidos) do município
-        for (const auto& dc : dadosCandidatos) {
+        // Adiciona os candidatos (válidos) do município
+        for (const auto& dc : resultadoCandidatos.candidatosDoMunicipio) {
             eleicao.addCandidato(std::make_shared<Candidato>(dc));
         }
 
-        // computa os votos
+        // Computa os votos
         for (const auto& dv : dadosVotos) {
             eleicao.computaVotos(Voto(dv));
         }
 
-        // geração dos Relatórios
+        // Geração dos Relatórios
         Relatorio::gerarRelatorios(eleicao, dataEleicao);
 
     } catch (const std::runtime_error& e) {
